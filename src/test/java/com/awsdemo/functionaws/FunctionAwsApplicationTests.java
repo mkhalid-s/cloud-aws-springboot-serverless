@@ -2,38 +2,40 @@ package com.awsdemo.functionaws;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
+import org.springframework.cloud.function.context.test.FunctionalSpringBootTest;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+//@SpringBootTest
+@FunctionalSpringBootTest
+//@AutoConfigureMockMvc
+@AutoConfigureWebClient
 class FunctionAwsApplicationTests {
 
     @Autowired
-    private MockMvc mockMvc;
+    private WebTestClient webTestClient;
 
     @Test
     void contextLoads() {
     }
 
     @Test
-    public void checkReverseString() throws Exception {
-        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reverseString")
+    public void checkReverseString() {
+        webTestClient.post().uri("/reverseString")
+                .body(Mono.justOrEmpty("SpringBoot"), String.class)
+                .exchange().expectStatus().isOk().expectBody(String.class).isEqualTo("tooBgnirpS");
+        /*MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reverseString")
                 .contentType(MediaType.TEXT_PLAIN_VALUE)
                 .content("SpringBoot")
-        ).andReturn();
+        ).andReturn();*/
 
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(result)).
-                andExpect(MockMvcResultMatchers.content().string("tooBgnirpS"));
+        /*mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(result)).
+                andExpect(MockMvcResultMatchers.content().string("tooBgnirpS"));*/
 
     }
 
-    @Test
+/*    @Test
     public void failCheckReverseString() throws Exception {
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reverseString")
                 .contentType(MediaType.TEXT_PLAIN_VALUE)
@@ -43,6 +45,6 @@ class FunctionAwsApplicationTests {
         mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(result)).
                 andExpect(MockMvcResultMatchers.content().string("tooBgnirpS"));
 
-    }
+    }*/
 
 }
