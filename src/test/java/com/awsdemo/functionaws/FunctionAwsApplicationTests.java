@@ -3,6 +3,7 @@ package com.awsdemo.functionaws;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.cloud.function.context.test.FunctionalSpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -10,20 +11,20 @@ import reactor.core.publisher.Mono;
 //@SpringBootTest
 @FunctionalSpringBootTest
 //@AutoConfigureMockMvc
-@AutoConfigureWebClient
+@AutoConfigureWebTestClient
 class FunctionAwsApplicationTests {
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @Test
+    /*@Test
     void contextLoads() {
-    }
+    }*/
 
     @Test
     public void checkReverseString() {
         webTestClient.post().uri("/reverseString")
-                .body(Mono.justOrEmpty("SpringBoot"), String.class)
+                .body(Mono.justOrEmpty("SpringBoot").single(), String.class)
                 .exchange().expectStatus().isOk().expectBody(String.class).isEqualTo("tooBgnirpS");
         /*MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reverseString")
                 .contentType(MediaType.TEXT_PLAIN_VALUE)
