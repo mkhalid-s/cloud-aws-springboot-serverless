@@ -13,24 +13,24 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import java.util.function.Function;
 
-//@SpringBootApplication
-@SpringBootConfiguration
-public class FunctionAwsApplication implements ApplicationContextInitializer<GenericApplicationContext> {
+@SpringBootApplication
+//@SpringBootConfiguration
+public class FunctionAwsApplication {
 
     public static void main(String[] args) {
-        //SpringApplication.run(FunctionAwsApplication.class, args);
-        FunctionalSpringApplication.run(FunctionAwsApplication.class, args);
+        SpringApplication.run(FunctionAwsApplication.class, args);
+       // FunctionalSpringApplication.run(FunctionAwsApplication.class, args);
     }
 
-    //@Bean
+    @Bean
     public Function<String, String> reverseString() {
         return value -> value == null ? "BLANK_VALUE" : new StringBuilder(value).reverse().toString();
     }
 
-    @Override
+   /* @Override
     public void initialize(GenericApplicationContext applicationContext) {
         applicationContext.registerBean("reverseString", FunctionRegistration.class,
                 () -> new FunctionRegistration<>(reverseString())
                         .type(FunctionType.from(String.class).to(String.class)));
-    }
+    }*/
 }
